@@ -22,8 +22,8 @@ public class AdditionalAdditionsDatagenNeoForge {
     // combined data run doesn't work and doing a server run clears client run data
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent.Client event) {
-        event.createWorldRegistryObjects(AAGameTestDatagen.registryBuilder());
-        event.createReloadableRegistryObjects(new RegistrySetBuilder().add(AARecipeDatagenProvider.create()));
+        event.getDefaultPackGenerator().createWorldRegistryObjects(AAGameTestDatagen.registryBuilder());
+        event.getDefaultPackGenerator().createReloadableRegistryObjects(new RegistrySetBuilder().add(AARecipeDatagenProvider.create()));
         event.createProvider(AAModelProvider::new);
         event.createProvider(AAItemTagDatagenProvider::new);
         event.createProvider(AABlockTagDatagenProvider::new);

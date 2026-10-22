@@ -20,8 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(BlockTransformer.class)
 public class BlockTransformerMixin {
-    @Inject(method = "transformBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/component/BlockTransformer$TransformParticle;send(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;)V"))
-    private void spawnCopperPatina(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir, @Local(name = "oldBlockState") BlockState oldBlockState, @Local(name = "newBlockState") BlockState newBlockState) {
+    // because neoforge adds an overload
+    @Inject(method = "transformBlock*", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/component/BlockTransformer$TransformParticle;send(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;)V"))
+    private void spawnCopperPatina(CallbackInfoReturnable<InteractionResult> cir, @Local(argsOnly = true) UseOnContext context, @Local(name = "oldBlockState") BlockState oldBlockState, @Local(name = "newBlockState") BlockState newBlockState) {
         if (!Config.COPPER_PATINA.get().enabled()) return;
         if (WeatheringCopper.getPrevious(oldBlockState.getBlock()).filter(newBlockState::is).isEmpty()) return;
         Block.popResource(context.getLevel(), context.getClickedPos(), new ItemStack(AAItems.COPPER_PATINA.get()));
